@@ -1,5 +1,5 @@
 
-🧠 Dr. Nova – AI Research Assistant
+## 🧠 Dr. Nova – AI Research Assistant
 
 Dr. Nova is an AI-powered research assistant that:
 
