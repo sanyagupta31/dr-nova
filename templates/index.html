@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. Nova — AI Research Assistant</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f7fc;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+    h1 span {
+      background: linear-gradient(45deg, #3a7bd5, #00d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center;
+      color: #7a8ca4;
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+    }
+    .btn {
+      margin: 0 auto;
+      display: block;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #3a7bd5, #00d2ff);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .feature-item {
+      width: 200px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    .feature-item i {
+      font-size: 2rem;
+      color: #3a7bd5;
+      margin-bottom: 10px;
+    }
+    .feature-item h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    .feature-item p {
+      font-size: 0.9rem;
+      color: #7a8ca4;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+      margin-bottom: 30px;
+    }
+    .card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .file-upload-label {
+      display: block;
+      padding: 15px;
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      color: #3a7bd5;
+    }
+    .result-content {
+      background: #f4f7fc;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+    .qa-input-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    #question {
+      flex-grow: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    #askButton {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #3a7bd5;
+      color: white;
+      cursor: pointer;
+    }
+    .spinner {
+      font-style: italic;
+      color: #7a8ca4;
+    }
+    .back-button {
+      background: transparent;
+      border: none;
+      color: #3a7bd5;
+      cursor: pointer;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Landing Page -->
+    <section id="landing-page" class="page active">
+      <h1>Meet <span>Dr. Nova</span></h1>
+      <p class="subtitle">Your intelligent research partner. Instantly summarize dense papers, get answers to complex questions, and accelerate your discovery process.</p>
+      <button class="btn" id="startApp">Get Started <i class="fa-solid fa-arrow-right"></i></button>
+
+      <div class="features">
+        <div class="feature-item">
+          <i class="fa-solid fa-file-alt"></i>
+          <h3>Instant Summaries</h3>
+          <p>Upload a PDF and get a concise, easy-to-read summary in seconds.</p>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-question-circle"></i>
+          <h3>In-Depth Q&A</h3>
+          <p>Ask specific questions about the paper's content, methods, or findings.</p>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-lightbulb"></i>
+          <h3>Accelerate Insights</h3>
+          <p>Quickly grasp key concepts and focus on what truly matters in your research.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- App Page -->
+    <section id="app-page" class="page">
+      <button class="back-button" onclick="goBack()">← Back to Home</button>
+
+      <div class="card">
+        <h2><i class="fa-solid fa-upload"></i> Upload Research Paper (PDF)</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+          <label class="file-upload-label" for="pdf-upload">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Choose a PDF file...
+          </label>
+          <input type="file" id="pdf-upload" name="pdf" accept="application/pdf" required />
+          <span id="fileName" style="display:block;margin-top:10px;color:#888;">No file selected</span>
+          <button type="submit" class="btn" style="margin-top:20px;">Summarize & Analyze</button>
+        </form>
+      </div>
+
+      <div class="card" id="resultsCard" style="display:none;">
+        <h2><i class="fa-solid fa-list"></i> Summary</h2>
+        <div id="summary" class="result-content">Your summary will appear here...</div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;" />
+
+        <h2><i class="fa-solid fa-question"></i> Ask a Question</h2>
+        <div class="qa-input-group">
+          <input type="text" id="question" placeholder="Ask a question about the paper..." />
+          <button id="askButton" onclick="askQuestion()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+        <div id="answer" class="result-content">Your answer will appear here...</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const landingPage = document.getElementById("landing-page");
+    const appPage = document.getElementById("app-page");
+    const startAppBtn = document.getElementById("startApp");
+
+    function goBack() {
+      landingPage.classList.add("active");
+      appPage.classList.remove("active");
+    }
+
+    startAppBtn.addEventListener("click", () => {
+      landingPage.classList.remove("active");
+      appPage.classList.add("active");
+    });
+
+    const uploadForm = document.getElementById('uploadForm');
+    const pdfInput = document.getElementById('pdf-upload');
+    const fileNameSpan = document.getElementById('fileName');
+    const summaryDiv = document.getElementById('summary');
+    const answerDiv = document.getElementById('answer');
+    const resultsCard = document.getElementById('resultsCard');
+    const questionInput = document.getElementById('question');
+
+    let documentContext = "";
+
+    pdfInput.onchange = () => {
+      fileNameSpan.innerText = pdfInput.files[0]?.name || "No file selected";
+    };
+
+    uploadForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const file = pdfInput.files[0];
+      if (!file) {
+        summaryDiv.innerText = "Please select a file first.";
+        return;
+      }
+
+      summaryDiv.innerHTML = "<span class='spinner'>Generating summary...</span>";
+      answerDiv.innerHTML = "Your answer will appear here...";
+      resultsCard.style.display = 'block';
+
+      const formData = new FormData();
+      formData.append("pdf", file);
+
+      try {
+        const response = await fetch("/upload", {
+          method: "POST",
+          body: formData
+        });
+        const data = await response.json();
+        summaryDiv.innerText = data.summary;
+        documentContext = data.context;
+      } catch (err) {
+        summaryDiv.innerText = "An error occurred while uploading the PDF.";
+        console.error(err);
+      }
+    };
+
+    async function askQuestion() {
+      const question = questionInput.value;
+      if (!question.trim()) {
+        answerDiv.innerText = "Please enter a question.";
+        return;
+      }
+      if (!documentContext) {
+        answerDiv.innerText = "Please upload and summarize a paper first.";
+        return;
+      }
+
+      answerDiv.innerHTML = "<span class='spinner'>Thinking...</span>";
+
+      try {
+        const response = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: question,
+            context: documentContext
+          })
+        });
+        const data = await response.json();
+        answerDiv.innerText = data.answer;
+      } catch (err) {
+        answerDiv.innerText = "Error getting answer.";
+        console.error(err);
+      }
+    }
+
+    questionInput.addEventListener("keyup", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        askQuestion();
+      }
+    });
+  </script>
+</body>
+</html>

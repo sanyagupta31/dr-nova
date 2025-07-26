@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env
+.venv/
+venv/
+env/
+
+# IDE-specific
+.vscode/
+.idea/
+
+# Uploads and user-generated content
+uploads/
+*.pdf
+
+# Log files
+*.log
+
+# Flask cache and session files
+instance/
+*.sqlite3
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# PyMuPDF cache
+.mupdf/
+
+# Python virtual environment metadata
+pip-wheel-metadata/
