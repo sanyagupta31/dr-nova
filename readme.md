@@ -66,11 +66,7 @@ Visit [http://localhost:5000](http://localhost:5000) in your browser.
 
 ---
 
-## 📷 Screenshot
 
-> *Optional: Insert a screenshot of the web UI here if you have one.*
-
----
 
 ## 🛠️ Built With
 
